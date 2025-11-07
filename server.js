@@ -158,6 +158,20 @@ app.post("/guardar-encuesta", async (req, res) => {
   }
 });
 
+// 🔓 Cerrar sesión
+app.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error al cerrar sesión:', err);
+      return res.status(500).json({ message: 'Error al cerrar sesión' });
+    }
+
+    res.clearCookie('connect.sid'); // limpia la cookie de sesión
+    res.json({ message: 'Sesión cerrada correctamente' });
+  });
+});
+
+
 // Ruta raíz
 app.get('/', (req, res) => {
   res.send('✅ Servidor backend activo');
