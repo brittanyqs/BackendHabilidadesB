@@ -129,16 +129,33 @@ app.post('/login', async (req, res) => {
   });
 });
 
-// 🚪 Cerrar sesión
-app.get('/logout', (req, res) => {
-  req.session.destroy(err => {
-    if (err) {
-      console.error('❌ Error al cerrar sesión:', err);
-      return res.status(500).json({ message: 'Error al cerrar sesión.' });
-    }
-    res.clearCookie('connect.sid');
-    res.json({ message: 'Sesión cerrada correctamente.' });
-  });
+
+// Encuesta
+
+const Encuesta = require("./models/Encuesta"); // <-- importa el modelo
+
+// Guardar encuesta
+app.post("/guardar-encuesta", async (req, res) => {
+  try {
+    const { respuestas, puntaje, nivel } = req.body;
+
+    // Si tienes login con sesión, guarda el ID del usuario logueado
+    const userId = req.session?.userId || null;
+
+    const nuevaEncuesta = new Encuesta({
+      userId,
+      respuestas,
+      puntaje,
+      nivel
+    });
+
+    await nuevaEncuesta.save();
+    res.json({ mensaje: "Encuesta guardada correctamente" });
+
+  } catch (err) {
+    console.error("Error al guardar encuesta:", err);
+    res.status(500).json({ error: "Error al guardar encuesta" });
+  }
 });
 
 // Ruta raíz
@@ -152,3 +169,4 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
+
