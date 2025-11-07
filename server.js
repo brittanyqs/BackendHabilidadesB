@@ -43,14 +43,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Configuración de sesión (muy importante para que funcione el login)
+
 app.use(session({
   secret: 'secreto123',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false,        // ⚠️ Cámbialo a true si usas HTTPS (Netlify)
+    secure: true,      // ✅ Render usa HTTPS, así que debe ser true
     httpOnly: true,
-    sameSite: 'lax'
+    sameSite: 'none'   // ✅ MUY IMPORTANTE: permite cookies entre dominios (Render ↔ Netlify)
   }
 }));
 
@@ -185,5 +186,6 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
+
 
 
