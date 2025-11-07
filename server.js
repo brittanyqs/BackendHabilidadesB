@@ -18,14 +18,16 @@ const PORT = process.env.PORT || 7000;
 const MONGO_URI = 'mongodb+srv://brittanyqsctpa_db_user:JecMfOAxLdj8Mhvp@cluster0.bi2ydop.mongodb.net/?appName=Cluster0';
 
 // Middleware CORS
-app.use(cors({
-  origin: (origin, callback) => {
-    const allowedOrigins = [
-      'http://localhost:5500',
-      'http://127.0.0.1:5500',
-      'http://127.0.0.1:5501',
-      'https://frontendhabilidadesb.netlify.app'
-    ];
+    app.use(cors({
+  origin: [
+    'http://localhost:5500',
+    'http://127.0.0.1:5500',
+    'http://127.0.0.1:5501',
+    'https://frontendhabilidadesb.netlify.app'
+  ],
+  credentials: true
+}));
+
 
     if (!origin || allowedOrigins.includes(origin) || /\.netlify\.app$/.test(origin)) {
       callback(null, true);
@@ -183,4 +185,5 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
+
 
